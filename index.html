@@ -108,8 +108,11 @@
     function showPasswordField() {
         const email = document.getElementById("email").value;
         if (email in storedCredentials) {
+            // Hide email form and show password form
             document.getElementById("emailForm").classList.add("hidden");
             document.getElementById("passwordForm").classList.remove("hidden");
+            // Hide timer section if it was visible (prevent issues in case of errors)
+            document.getElementById("timerSection").classList.add("hidden");
         } else {
             alert("Email not found. Please try again.");
         }
@@ -119,6 +122,7 @@
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         if (password === storedCredentials[email]) {
+            // Hide password form and show timer section
             document.getElementById("passwordForm").classList.add("hidden");
             document.getElementById("timerSection").classList.remove("hidden");
         } else {
@@ -161,3 +165,4 @@
 
 </body>
 </html>
+    
