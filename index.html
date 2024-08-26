@@ -147,11 +147,11 @@
 
         function sendReminder() {
             if (remindersSent < 3) {
-                alert("Reminder sent to your Gmail. Please return.");
+                alert("Reminder sent to your Gmail. Please return the equipment or else you will go to the deen 3 chances.");
                 remindersSent++;
                 setTimeout(sendReminder, 5000);  // Wait 5 seconds before sending the next reminder
             } else {
-                alert("You have been marked for not returning. Please contact the dean.");
+                alert("You have been marked for not returning. Please contact the deen.");
             }
         }
 
