@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email and Password Verification with Timer</title>
+    <title>Email Verification and Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,6 @@
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
-            flex-direction: column;
         }
         .container {
             background-color: white;
@@ -21,7 +20,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
-            margin-top: 20px;
+            text-align: center;
         }
         input[type="email"], input[type="password"], select {
             width: 100%;
@@ -33,15 +32,21 @@
         button {
             width: 100%;
             padding: 10px;
-            background-color: #4CAF50;
-            color: white;
+            margin: 10px 0;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
+        }
+        button.start {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button.cancel {
+            background-color: #f44336;
+            color: white;
         }
         button:hover {
-            background-color: #45a049;
+            opacity: 0.9;
         }
         .hidden {
             display: none;
@@ -50,48 +55,42 @@
             color: red;
             font-size: 0.9em;
         }
-        .intro {
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 1.1em;
-            color: #333;
-        }
     </style>
 </head>
 <body>
 
-<div class="intro">
-    <p>Please remember to return the borrowed equipment on time. 
-        Choose the appropriate timer after verifying your email and password. 
-        If you do not return on time, you will receive reminders, and eventually, 
-        you will be asked to see the dean.</p>
-</div>
-
 <div class="container">
-    <form id="emailForm" class="emailForm">
+    <div id="introduction">
+        <h2>Welcome!</h2>
+        <p>Please return any borrowed equipment on time. Failure to do so will result in reminders and further actions.</p>
+        <button onclick="startProcess()">Get Started</button>
+    </div>
+
+    <form id="emailForm" class="hidden">
         <h2>Enter your email</h2>
         <input type="email" id="email" placeholder="Email" required>
         <button type="button" onclick="showPasswordField()">Next</button>
     </form>
 
-    <form id="passwordForm" class="passwordForm hidden">
+    <form id="passwordForm" class="hidden">
         <h2>Verify with your password</h2>
         <input type="password" id="password" placeholder="Password" required>
         <button type="button" onclick="verifyPassword()">Submit</button>
         <div id="error" class="error hidden">Incorrect password. Please try again.</div>
     </form>
 
-    <form id="timerForm" class="timerForm hidden">
-        <h2>Set a Timer</h2>
+    <div id="timerOptions" class="hidden">
+        <h2>Select a Timer</h2>
         <select id="timerSelect">
-            <option value="600">10 minutes</option>
-            <option value="1800">30 minutes</option>
-            <option value="3600">1 hour</option>
-            <option value="5400">1 hour 30 minutes</option>
+            <option value="10">10 Minutes</option>
+            <option value="30">30 Minutes</option>
+            <option value="60">1 Hour</option>
+            <option value="90">1 Hour 30 Minutes</option>
         </select>
-        <button type="button" onclick="startTimer()">Start Timer</button>
-        <button type="button" onclick="cancelAction()">Cancel</button>
-    </form>
+        <button class="start" onclick="startTimer()">Start Timer</button>
+        <button class="cancel" onclick="cancelProcess()">Cancel</button>
+    </div>
+
 </div>
 
 <script>
@@ -101,8 +100,10 @@
         "yourname@example.com": "yourpassword"  // Your email and password added here
     };
 
-    let timerInterval;
-    let reminderCount = 0;
+    function startProcess() {
+        document.getElementById("introduction").classList.add("hidden");
+        document.getElementById("emailForm").classList.remove("hidden");
+    }
 
     function showPasswordField() {
         const email = document.getElementById("email").value;
@@ -119,40 +120,27 @@
         const password = document.getElementById("password").value;
         if (password === storedCredentials[email]) {
             document.getElementById("passwordForm").classList.add("hidden");
-            document.getElementById("timerForm").classList.remove("hidden");
+            document.getElementById("timerOptions").classList.remove("hidden");
         } else {
             document.getElementById("error").classList.remove("hidden");
         }
     }
 
     function startTimer() {
-        let selectedTime = parseInt(document.getElementById("timerSelect").value);
-        const email = document.getElementById("email").value;
-
-        timerInterval = setInterval(() => {
-            if (selectedTime > 0) {
-                selectedTime--;
-                console.log(`Time left: ${selectedTime} seconds`);
-            } else {
-                clearInterval(timerInterval);
-                sendReminder(email);
-            }
-        }, 1000);
+        const time = document.getElementById("timerSelect").value * 60 * 1000;
+        alert(`Timer started for ${document.getElementById("timerSelect").value} minutes.`);
+        setTimeout(sendReminder, time);
     }
 
-    function sendReminder(email) {
-        if (reminderCount < 3) {
-            console.log(`Reminder sent to ${email}. Please return the equipment.`);
-            reminderCount++;
-            setTimeout(() => sendReminder(email), 60000); // Send reminder every 1 minute
-        } else {
-            alert("Please see the dean for not returning the equipment on time.");
-            window.close();
-        }
+    function sendReminder() {
+        alert("Please return the borrowed equipment.");
+        // This is where you'd implement the email sending functionality.
+        setTimeout(() => alert("Reminder 2: Please return the borrowed equipment."), 10000); // 10 seconds after first reminder
+        setTimeout(() => alert("Reminder 3: Please return the borrowed equipment."), 20000); // 10 seconds after second reminder
+        setTimeout(() => alert("Final notice: Please see the dean."), 30000); // 10 seconds after third reminder
     }
 
-    function cancelAction() {
-        clearInterval(timerInterval);
+    function cancelProcess() {
         window.close();
     }
 </script>
