@@ -21,6 +21,13 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
         }
+        h1, h2 {
+            text-align: center;
+        }
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
         input[type="email"], input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -42,18 +49,10 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-        }
-        .start-button {
             background-color: #4CAF50;
         }
-        .start-button:hover {
+        button:hover {
             background-color: #45a049;
-        }
-        .cancel-button {
-            background-color: #f44336;
-        }
-        .cancel-button:hover {
-            background-color: #e53935;
         }
         .hidden {
             display: none;
@@ -61,6 +60,7 @@
         .error {
             color: red;
             font-size: 0.9em;
+            text-align: center;
         }
         .flashing-red {
             animation: flash 1s infinite;
@@ -76,6 +76,9 @@
 <body>
 
 <div class="container">
+    <h1>Welcome</h1>
+    <p>Please enter your email and password to verify your identity and select a timer for returning the equipment.</p>
+
     <form id="emailForm" class="emailForm">
         <h2>Enter your email</h2>
         <input type="email" id="email" placeholder="Email" required>
@@ -97,8 +100,8 @@
             <option value="3600">1 hour</option>
             <option value="5400">1 hour 30 minutes</option>
         </select>
-        <button class="start-button" onclick="startTimer()">Start Timer</button>
-        <button class="cancel-button" onclick="cancelTimer()">Cancel</button>
+        <button onclick="startTimer()">Start Timer</button>
+        <button onclick="cancelTimer()">Cancel</button>
         <div id="countdown"></div>
     </div>
 </div>
