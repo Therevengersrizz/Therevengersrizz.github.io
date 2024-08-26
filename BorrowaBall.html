@@ -123,7 +123,7 @@
     }
 
     function startTimer() {
-        const selectedTime = document.getElementById("timerSelect").value;
+        let selectedTime = parseInt(document.getElementById("timerSelect").value);
         const email = document.getElementById("email").value;
 
         timerInterval = setInterval(() => {
