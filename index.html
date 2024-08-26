@@ -87,6 +87,7 @@
     <div id="timerSection" class="hidden timer-container">
         <h2>Select Timer Duration</h2>
         <select id="timerSelect">
+            <option value="600">10 minutes</option>
             <option value="1800">30 minutes</option>
             <option value="3600">1 hour</option>
             <option value="5400">1 hour 30 minutes</option>
@@ -129,6 +130,7 @@
         const duration = parseInt(document.getElementById("timerSelect").value, 10);
         const countdownElement = document.getElementById("countdown");
         let timeLeft = duration;
+        let remindersSent = 0;
 
         function updateCountdown() {
             const minutes = Math.floor(timeLeft / 60);
@@ -144,19 +146,13 @@
         }
 
         function sendReminder() {
-            let remindersSent = 0;
-
-            function send() {
-                if (remindersSent < 3) {
-                    alert("Reminder sent to your Gmail. Please return.");
-                    remindersSent++;
-                    setTimeout(send, 5000);  // Wait 5 seconds before sending the next reminder
-                } else {
-                    alert("You have been marked for not returning. Please contact the dean.");
-                }
+            if (remindersSent < 3) {
+                alert("Reminder sent to your Gmail. Please return.");
+                remindersSent++;
+                setTimeout(sendReminder, 5000);  // Wait 5 seconds before sending the next reminder
+            } else {
+                alert("You have been marked for not returning. Please contact the dean.");
             }
-
-            send();
         }
 
         updateCountdown();
