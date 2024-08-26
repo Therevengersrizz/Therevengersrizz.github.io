@@ -48,23 +48,27 @@
             color: red;
             font-size: 0.9em;
         }
+        .intro {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
 <div class="container">
-    <div id="introduction">
-        <h2>Borrowing Sports Equipment</h2>
-        <p>Welcome! To borrow school sports equipment, you need to log in with your email and password. Once verified, you can set a timer for how long you intend to use the equipment.</p>
-        <p>After the timer expires, a reminder will be sent to your email. If you don't return the equipment after three reminders, you will be asked to see the dean.</p>
-        <p>Please make sure to return the equipment on time to avoid any issues. Click "Next" to proceed.</p>
-        <button onclick="startProcess()">Next</button>
+    <div class="intro">
+        <h1>Welcome!</h1>
+        <p>Thank you for using our equipment rental system. Please follow the steps below to verify your email and password, select a timer for returning your equipment, and ensure its timely return. If you need to cancel, you can do so at any time. Let's get started!</p>
     </div>
-
-    <form id="emailForm" class="emailForm hidden">
+    
+    <form id="emailForm" class="emailForm" onsubmit="return validateCaptcha()">
         <h2>Enter your email</h2>
         <input type="email" id="email" placeholder="Email" required>
-        <button type="button" onclick="showPasswordField()">Next</button>
+        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div> <!-- Replace YOUR_SITE_KEY with your actual site key -->
+        <button type="button" onclick="validateCaptcha()">Next</button>
+        <div id="captchaError" class="error hidden">Please complete the CAPTCHA.</div>
     </form>
 
     <form id="passwordForm" class="passwordForm hidden">
@@ -75,7 +79,13 @@
     </form>
 
     <div id="timerOptions" class="hidden">
-        <h2>Timer Set for 10 Seconds</h2>
+        <h2>Select a Timer</h2>
+        <select id="timerSelect">
+            <option value="600000">10 minutes</option>
+            <option value="1800000">30 minutes</option>
+            <option value="3600000">1 hour</option>
+            <option value="5400000">1 hour 30 minutes</option>
+        </select>
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="cancelTimer()">Cancel</button>
     </div>
@@ -94,12 +104,19 @@
 
     let countdown;
     let email;
-    let timerDuration = 10000; // 10 seconds for testing
+    let timerDuration;
     let emailSentCount = 0;
 
-    function startProcess() {
-        document.getElementById("introduction").classList.add("hidden");
-        document.getElementById("emailForm").classList.remove("hidden");
+    function validateCaptcha() {
+        const response = grecaptcha.getResponse();
+        if (response.length === 0) {
+            document.getElementById("captchaError").classList.remove("hidden");
+            return false;
+        } else {
+            document.getElementById("captchaError").classList.add("hidden");
+            showPasswordField();
+            return true;
+        }
     }
 
     function showPasswordField() {
@@ -124,6 +141,7 @@
     }
 
     function startTimer() {
+        timerDuration = parseInt(document.getElementById("timerSelect").value);
         document.getElementById("timerOptions").classList.add("hidden");
         document.getElementById("countdownDisplay").classList.remove("hidden");
 
@@ -147,11 +165,11 @@
 
     function sendReminder() {
         if (emailSentCount < 3) {
-            alert(`Reminder email sent to ${email}. Please return the equipment.`);
+            alert(`Reminder email sent to ${email}. Please return.`);
             emailSentCount++;
             setTimeout(sendReminder, 10000); // Sends the reminder every 10 seconds
         } else {
-            alert("You have been asked to see the dean for not returning the equipment.");
+            alert("You have been asked to see the dean for not returning.");
         }
     }
 
