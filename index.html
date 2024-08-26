@@ -20,8 +20,9 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
+            text-align: center;
         }
-        input[type="email"], input[type="password"] {
+        input[type="email"], input[type="password"], select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -47,25 +48,6 @@
             color: red;
             font-size: 0.9em;
         }
-        .timer-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .timer-container select {
-            padding: 10px;
-            margin: 10px 0;
-        }
-        .timer-container .countdown {
-            font-size: 1.5em;
-            margin: 20px 0;
-        }
-        .cancel-button {
-            background-color: #f44336;
-        }
-        .cancel-button:hover {
-            background-color: #e53935;
-        }
     </style>
 </head>
 <body>
@@ -84,17 +66,20 @@
         <div id="error" class="error hidden">Incorrect password. Please try again.</div>
     </form>
 
-    <div id="timerSection" class="hidden timer-container">
-        <h2>Select Timer Duration</h2>
+    <div id="timerOptions" class="hidden">
+        <h2>Select a Timer</h2>
         <select id="timerSelect">
-            <option value="600">10 minutes</option>
-            <option value="1800">30 minutes</option>
-            <option value="3600">1 hour</option>
-            <option value="5400">1 hour 30 minutes</option>
+            <option value="600000">10 minutes</option>
+            <option value="1800000">30 minutes</option>
+            <option value="3600000">1 hour</option>
+            <option value="5400000">1 hour 30 minutes</option>
         </select>
-        <button type="button" onclick="startTimer()">Start Timer</button>
-        <button type="button" class="cancel-button" onclick="window.close()">Cancel</button>
-        <div id="countdown" class="countdown"></div>
+        <button onclick="startTimer()">Start Timer</button>
+        <button onclick="cancelTimer()">Cancel</button>
+    </div>
+
+    <div id="countdownDisplay" class="hidden">
+        <h2>Time Remaining: <span id="timeRemaining"></span></h2>
     </div>
 </div>
 
@@ -105,64 +90,70 @@
         "yourname@example.com": "yourpassword"  // Your email and password added here
     };
 
+    let countdown;
+    let email;
+    let timerDuration;
+    let emailSentCount = 0;
+
     function showPasswordField() {
-        const email = document.getElementById("email").value;
+        email = document.getElementById("email").value;
         if (email in storedCredentials) {
-            // Hide email form and show password form
             document.getElementById("emailForm").classList.add("hidden");
             document.getElementById("passwordForm").classList.remove("hidden");
-            // Hide timer section if it was visible (prevent issues in case of errors)
-            document.getElementById("timerSection").classList.add("hidden");
         } else {
             alert("Email not found. Please try again.");
         }
     }
 
     function verifyPassword() {
-        const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         if (password === storedCredentials[email]) {
-            // Hide password form and show timer section
+            alert("Verification successful!");
             document.getElementById("passwordForm").classList.add("hidden");
-            document.getElementById("timerSection").classList.remove("hidden");
+            document.getElementById("timerOptions").classList.remove("hidden");
         } else {
             document.getElementById("error").classList.remove("hidden");
         }
     }
 
     function startTimer() {
-        const duration = parseInt(document.getElementById("timerSelect").value, 10);
-        const countdownElement = document.getElementById("countdown");
-        let timeLeft = duration;
-        let remindersSent = 0;
+        timerDuration = parseInt(document.getElementById("timerSelect").value);
+        document.getElementById("timerOptions").classList.add("hidden");
+        document.getElementById("countdownDisplay").classList.remove("hidden");
 
-        function updateCountdown() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            countdownElement.textContent = `${minutes}m ${seconds}s`;
-
-            if (timeLeft <= 0) {
+        countdown = setInterval(function() {
+            if (timerDuration <= 0) {
+                clearInterval(countdown);
                 sendReminder();
             } else {
-                timeLeft--;
-                setTimeout(updateCountdown, 1000);
+                timerDuration -= 1000;
+                document.getElementById("timeRemaining").textContent = formatTime(timerDuration);
             }
-        }
+        }, 1000);
+    }
 
-        function sendReminder() {
-            if (remindersSent < 3) {
-                alert("Reminder sent to your Gmail. Please return.");
-                remindersSent++;
-                setTimeout(sendReminder, 5000);  // Wait 5 seconds before sending the next reminder
-            } else {
-                alert("You have been marked for not returning. Please contact the dean.");
-            }
-        }
+    function formatTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}m ${seconds}s`;
+    }
 
-        updateCountdown();
+    function sendReminder() {
+        if (emailSentCount < 3) {
+            alert(`Reminder email sent to ${email}. Please return.`);
+            emailSentCount++;
+            setTimeout(sendReminder, 10000); // Sends the reminder every 10 seconds
+        } else {
+            alert("You have been asked to see the dean for not returning.");
+        }
+    }
+
+    function cancelTimer() {
+        clearInterval(countdown);
+        window.close();
     }
 </script>
 
 </body>
 </html>
-    
