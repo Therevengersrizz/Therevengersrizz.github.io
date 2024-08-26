@@ -13,6 +13,7 @@
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
+            flex-direction: column;
         }
         .container {
             background-color: white;
@@ -20,7 +21,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
-            text-align: center;
+            margin-top: 20px;
         }
         input[type="email"], input[type="password"], select {
             width: 100%;
@@ -37,6 +38,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #45a049;
@@ -48,20 +50,22 @@
             color: red;
             font-size: 0.9em;
         }
+        .intro {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1em;
+            color: #333;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="introduction">
-        <h2>Borrowing Sports Equipment</h2>
-        <p>Welcome! To borrow school sports equipment, you need to log in with your email and password. Once verified, you can set a timer for how long you intend to use the equipment.</p>
-        <p>After the timer expires, a reminder will be sent to your email. If you don't return the equipment after three reminders, you will be asked to see the dean.</p>
-        <p>Please make sure to return the equipment on time to avoid any issues. Click "Next" to proceed.</p>
-        <button onclick="startProcess()">Next</button>
-    </div>
+<div class="intro">
+    <p>Please remember to return the borrowed equipment on time. Choose the appropriate timer after verifying your email and password. If you do not return on time, you will receive reminders, and eventually, you will be asked to see the dean.</p>
+</div>
 
-    <form id="emailForm" class="emailForm hidden">
+<div class="container">
+    <form id="emailForm" class="emailForm">
         <h2>Enter your email</h2>
         <input type="email" id="email" placeholder="Email" required>
         <button type="button" onclick="showPasswordField()">Next</button>
@@ -74,21 +78,17 @@
         <div id="error" class="error hidden">Incorrect password. Please try again.</div>
     </form>
 
-    <div id="timerOptions" class="hidden">
-        <h2>Select a Timer</h2>
+    <form id="timerForm" class="timerForm hidden">
+        <h2>Set a Timer</h2>
         <select id="timerSelect">
-            <option value="600000">10 minutes</option>
-            <option value="1800000">30 minutes</option>
-            <option value="3600000">1 hour</option>
-            <option value="5400000">1 hour 30 minutes</option>
+            <option value="600">10 minutes</option>
+            <option value="1800">30 minutes</option>
+            <option value="3600">1 hour</option>
+            <option value="5400">1 hour 30 minutes</option>
         </select>
-        <button onclick="startTimer()">Start Timer</button>
-        <button onclick="cancelTimer()">Cancel</button>
-    </div>
-
-    <div id="countdownDisplay" class="hidden">
-        <h2>Time Remaining: <span id="timeRemaining"></span></h2>
-    </div>
+        <button type="button" onclick="startTimer()">Start Timer</button>
+        <button type="button" onclick="cancelAction()">Cancel</button>
+    </form>
 </div>
 
 <script>
@@ -98,18 +98,11 @@
         "yourname@example.com": "yourpassword"  // Your email and password added here
     };
 
-    let countdown;
-    let email;
-    let timerDuration;
-    let emailSentCount = 0;
-
-    function startProcess() {
-        document.getElementById("introduction").classList.add("hidden");
-        document.getElementById("emailForm").classList.remove("hidden");
-    }
+    let timerInterval;
+    let reminderCount = 0;
 
     function showPasswordField() {
-        email = document.getElementById("email").value;
+        const email = document.getElementById("email").value;
         if (email in storedCredentials) {
             document.getElementById("emailForm").classList.add("hidden");
             document.getElementById("passwordForm").classList.remove("hidden");
@@ -119,51 +112,44 @@
     }
 
     function verifyPassword() {
+        const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         if (password === storedCredentials[email]) {
-            alert("Verification successful!");
             document.getElementById("passwordForm").classList.add("hidden");
-            document.getElementById("timerOptions").classList.remove("hidden");
+            document.getElementById("timerForm").classList.remove("hidden");
         } else {
             document.getElementById("error").classList.remove("hidden");
         }
     }
 
     function startTimer() {
-        timerDuration = parseInt(document.getElementById("timerSelect").value);
-        document.getElementById("timerOptions").classList.add("hidden");
-        document.getElementById("countdownDisplay").classList.remove("hidden");
+        const selectedTime = document.getElementById("timerSelect").value;
+        const email = document.getElementById("email").value;
 
-        countdown = setInterval(function() {
-            if (timerDuration <= 0) {
-                clearInterval(countdown);
-                sendReminder();
+        timerInterval = setInterval(() => {
+            if (selectedTime > 0) {
+                selectedTime--;
+                console.log(`Time left: ${selectedTime} seconds`);
             } else {
-                timerDuration -= 1000;
-                document.getElementById("timeRemaining").textContent = formatTime(timerDuration);
+                clearInterval(timerInterval);
+                sendReminder(email);
             }
         }, 1000);
     }
 
-    function formatTime(ms) {
-        const totalSeconds = Math.floor(ms / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        return `${minutes}m ${seconds}s`;
-    }
-
-    function sendReminder() {
-        if (emailSentCount < 3) {
-            alert(`Reminder email sent to ${email}. Please return the equipment.`);
-            emailSentCount++;
-            setTimeout(sendReminder, 10000); // Sends the reminder every 10 seconds
+    function sendReminder(email) {
+        if (reminderCount < 3) {
+            console.log(`Reminder sent to ${email}. Please return the equipment.`);
+            reminderCount++;
+            setTimeout(() => sendReminder(email), 60000); // Send reminder every 1 minute
         } else {
-            alert("You have been asked to see the dean for not returning the equipment.");
+            alert("Please see the dean for not returning the equipment on time.");
+            window.close();
         }
     }
 
-    function cancelTimer() {
-        clearInterval(countdown);
+    function cancelAction() {
+        clearInterval(timerInterval);
         window.close();
     }
 </script>
