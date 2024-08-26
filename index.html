@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email and Password Verification</title>
+    <title>Email and Password Verification with Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,6 +47,25 @@
             color: red;
             font-size: 0.9em;
         }
+        .timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .timer-container select {
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .timer-container .countdown {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .cancel-button {
+            background-color: #f44336;
+        }
+        .cancel-button:hover {
+            background-color: #e53935;
+        }
     </style>
 </head>
 <body>
@@ -64,14 +83,25 @@
         <button type="button" onclick="verifyPassword()">Submit</button>
         <div id="error" class="error hidden">Incorrect password. Please try again.</div>
     </form>
+
+    <div id="timerSection" class="hidden timer-container">
+        <h2>Select Timer Duration</h2>
+        <select id="timerSelect">
+            <option value="1800">30 minutes</option>
+            <option value="3600">1 hour</option>
+            <option value="5400">1 hour 30 minutes</option>
+        </select>
+        <button type="button" onclick="startTimer()">Start Timer</button>
+        <button type="button" class="cancel-button" onclick="window.close()">Cancel</button>
+        <div id="countdown" class="countdown"></div>
+    </div>
 </div>
 
 <script>
     const storedCredentials = {
-        "thomas.coghlan@mbi.school.nz": "iscool",
-        "52822@mbi.school.nz": "rizz",
-        "868244@mbi.school.nz": "sigma",
-        "1098980mbi.school.nz": "idk"  // Your email and password added here
+        "user@example.com": "password123",
+        "anotheruser@example.com": "mypassword",
+        "yourname@example.com": "yourpassword"  // Your email and password added here
     };
 
     function showPasswordField() {
@@ -88,10 +118,48 @@
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         if (password === storedCredentials[email]) {
-            alert("Verification successful!");
+            document.getElementById("passwordForm").classList.add("hidden");
+            document.getElementById("timerSection").classList.remove("hidden");
         } else {
             document.getElementById("error").classList.remove("hidden");
         }
+    }
+
+    function startTimer() {
+        const duration = parseInt(document.getElementById("timerSelect").value, 10);
+        const countdownElement = document.getElementById("countdown");
+        let timeLeft = duration;
+
+        function updateCountdown() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            countdownElement.textContent = `${minutes}m ${seconds}s`;
+
+            if (timeLeft <= 0) {
+                sendReminder();
+            } else {
+                timeLeft--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+
+        function sendReminder() {
+            let remindersSent = 0;
+
+            function send() {
+                if (remindersSent < 3) {
+                    alert("Reminder sent to your Gmail. Please return.");
+                    remindersSent++;
+                    setTimeout(send, 5000);  // Wait 5 seconds before sending the next reminder
+                } else {
+                    alert("You have been marked for not returning. Please contact the dean.");
+                }
+            }
+
+            send();
+        }
+
+        updateCountdown();
     }
 </script>
 
