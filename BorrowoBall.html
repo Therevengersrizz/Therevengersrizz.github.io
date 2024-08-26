@@ -53,7 +53,6 @@
             font-size: 1.1em;
         }
     </style>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -63,12 +62,10 @@
         <p>Thank you for using our equipment rental system. Please follow the steps below to verify your email and password, select a timer for returning your equipment, and ensure its timely return. If you need to cancel, you can do so at any time. Let's get started!</p>
     </div>
     
-    <form id="emailForm" class="emailForm" onsubmit="return validateCaptcha()">
-        <h2>Please enter your email</h2>
+    <form id="emailForm" class="emailForm">
+        <h2>Enter your email</h2>
         <input type="email" id="email" placeholder="Email" required>
-        <div class="g-recaptcha" data-sitekey="6LeW0y8qAAAAAFLBoGj5aw-TQpx14DNcMj5hKSwR"></div> <!-- Replace YOUR_SITE_KEY with your actual site key -->
-        <button type="button" onclick="validateCaptcha()">Next</button>
-        <div id="captchaError" class="error hidden">Please complete the CAPTCHA.</div>
+        <button type="button" onclick="showPasswordField()">Next</button>
     </form>
 
     <form id="passwordForm" class="passwordForm hidden">
@@ -106,18 +103,6 @@
     let email;
     let timerDuration;
     let emailSentCount = 0;
-
-    function validateCaptcha() {
-        const response = grecaptcha.getResponse();
-        if (response.length === 0) {
-            document.getElementById("captchaError").classList.remove("hidden");
-            return false;
-        } else {
-            document.getElementById("captchaError").classList.add("hidden");
-            showPasswordField();
-            return true;
-        }
-    }
 
     function showPasswordField() {
         email = document.getElementById("email").value;
@@ -160,12 +145,12 @@
         const totalSeconds = Math.floor(ms / 1000);
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
-        return `${minutes}m ${seconds}s`;
+        return ${minutes}m ${seconds}s;
     }
 
     function sendReminder() {
         if (emailSentCount < 3) {
-            alert(`Reminder email sent to ${email}. Please return.`);
+            alert(Reminder email sent to ${email}. Please return.);
             emailSentCount++;
             setTimeout(sendReminder, 10000); // Sends the reminder every 10 seconds
         } else {
