@@ -89,6 +89,7 @@
         </select>
         <button class="start" onclick="startTimer()">Start Timer</button>
         <button class="cancel" onclick="cancelProcess()">Cancel</button>
+        <div id="countdown" class="hidden"></div>
     </div>
 
 </div>
@@ -122,19 +123,34 @@
             document.getElementById("passwordForm").classList.add("hidden");
             document.getElementById("timerOptions").classList.remove("hidden");
         } else {
+            alert("Incorrect password. Please try again.");
             document.getElementById("error").classList.remove("hidden");
         }
     }
 
     function startTimer() {
-        const time = document.getElementById("timerSelect").value * 60 * 1000;
-        alert(`Timer started for ${document.getElementById("timerSelect").value} minutes.`);
-        setTimeout(sendReminder, time);
+        const timeInMinutes = parseInt(document.getElementById("timerSelect").value);
+        const countdownElement = document.getElementById("countdown");
+        countdownElement.classList.remove("hidden");
+
+        let timeInSeconds = timeInMinutes * 60;
+
+        const timerInterval = setInterval(() => {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            countdownElement.innerHTML = `Time remaining: ${minutes}m ${seconds}s`;
+            timeInSeconds--;
+
+            if (timeInSeconds < 0) {
+                clearInterval(timerInterval);
+                countdownElement.innerHTML = "Time's up!";
+                sendReminder();
+            }
+        }, 1000);
     }
 
     function sendReminder() {
         alert("Please return the borrowed equipment.");
-        // This is where you'd implement the email sending functionality.
         setTimeout(() => alert("Reminder 2: Please return the borrowed equipment."), 10000); // 10 seconds after first reminder
         setTimeout(() => alert("Reminder 3: Please return the borrowed equipment."), 20000); // 10 seconds after second reminder
         setTimeout(() => alert("Final notice: Please see the dean."), 30000); // 10 seconds after third reminder
