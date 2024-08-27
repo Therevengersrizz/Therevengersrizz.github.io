@@ -1,48 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body, html {
-  height: 100%;
-  margin: 0;
-}
-
-.bg {
-  /* The image used */
-  background-image: url("Background.jpeg");
-
-  /* Full height */
-  height: 100%; 
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-</style>
-</head>
-    <style>
-body {
-  background-image: url('https://geckosportsequipment.co.nz/wp-content/uploads/sports-tools_53876-138077.png');
-}
-</style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://target.scene7.com/is/image/Target/GUEST_20affc7e-e0d7-4eb6-a6f3-68d13520f8be?wid=488&hei=488&fmt=pjpeg">
     <title>Borrow'o'Ball</title>
     <style>
-        body {
+        body, html {
+            height: 100%;
+            margin: 0;
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-image: url('background.jpg'); /* Replace with your image path */
+            background-image: url('Background.jpeg'); /* Ensure this path is correct */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
+
         .container {
             background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
             padding: 20px;
@@ -50,13 +25,16 @@ body {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
         }
+
         h1, h2 {
             text-align: center;
         }
+
         p {
             text-align: center;
             margin-bottom: 20px;
         }
+
         input[type="email"], input[type="password"] {
             width: 90%;
             padding: 10px;
@@ -64,6 +42,7 @@ body {
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
         select {
             width: 100%;
             padding: 10px;
@@ -71,6 +50,7 @@ body {
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
         button {
             width: 100%;
             padding: 10px;
@@ -80,21 +60,26 @@ body {
             cursor: pointer;
             background-color: #4CAF50;
         }
+
         button:hover {
             background-color: #45a049;
         }
+
         .hidden {
             display: none;
         }
+
         .error {
             color: red;
             font-size: 0.9em;
             text-align: center;
         }
+
         .flashing-red {
             animation: flash 1s infinite;
             background-color: red;
         }
+
         @keyframes flash {
             0% { background-color: red; }
             50% { background-color: white; }
@@ -106,7 +91,7 @@ body {
 
 <div class="container">
     <h1>Welcome</h1>
-    <p>Please enter your email and password to verify your identity and select a timer for returning the equipment, If you dont return the sports equipment 3 times you might see the dean</p>
+    <p>Please enter your email and password to verify your identity and select a timer for returning the equipment. If you don't return the sports equipment 3 times, you might see the dean.</p>
 
     <form id="emailForm" class="emailForm">
         <h2>Enter your email</h2>
@@ -140,7 +125,7 @@ body {
 
 <script>
     const storedCredentials = {
-        "279356@mbi.school.nz": "123",
+       "279356@mbi.school.nz": "123",
         "adam.maxey@mbi.school.nz": "123",
         "andrio.tobuzo@mbi.school.nz": "123",
         "868244@mbi.school.nz": "123",
@@ -165,6 +150,7 @@ body {
         "anotheruser@example.com": "123",
         "yourname@example.com": "123"  // Your email and password added here
     };
+
     let timer;
     let countdownElement = document.getElementById('countdown');
     let timeLeft;
