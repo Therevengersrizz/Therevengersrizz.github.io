@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,19 +5,18 @@
     <link rel="icon" href="https://target.scene7.com/is/image/Target/GUEST_20affc7e-e0d7-4eb6-a6f3-68d13520f8be?wid=488&hei=488&fmt=pjpeg">
     <title>Borrow'o'Ball</title>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
+        body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('Background.jpeg'); /* Ensure this path is correct */
+            height: 100vh;
+            margin: 0;
+            background-image: url('background.jpg'); /* Replace with your image path */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
-
         .container {
             background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
             padding: 20px;
@@ -26,16 +24,13 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
         }
-
         h1, h2 {
             text-align: center;
         }
-
         p {
             text-align: center;
             margin-bottom: 20px;
         }
-
         input[type="email"], input[type="password"] {
             width: 90%;
             padding: 10px;
@@ -43,7 +38,6 @@
             border-radius: 4px;
             border: 1px solid #ccc;
         }
-
         select {
             width: 100%;
             padding: 10px;
@@ -51,7 +45,6 @@
             border-radius: 4px;
             border: 1px solid #ccc;
         }
-
         button {
             width: 100%;
             padding: 10px;
@@ -61,26 +54,21 @@
             cursor: pointer;
             background-color: #4CAF50;
         }
-
         button:hover {
             background-color: #45a049;
         }
-
         .hidden {
             display: none;
         }
-
         .error {
             color: red;
             font-size: 0.9em;
             text-align: center;
         }
-
         .flashing-red {
             animation: flash 1s infinite;
             background-color: red;
         }
-
         @keyframes flash {
             0% { background-color: red; }
             50% { background-color: white; }
@@ -122,11 +110,19 @@
         <button id="cancelTimerBtn" onclick="cancelTimer()">Cancel</button>
         <div id="countdown"></div>
     </div>
+
+    <!-- New section for the "Time's up" screen -->
+    <div id="timesUpSection" class="hidden">
+        <h2>Time's up!</h2>
+        <p>Please return the equipment.</p>
+        <button onclick="returnEquipment()">Yes, I returned the equipment</button>
+        <button onclick="borrowMoreTime()">Borrow for more time</button>
+    </div>
 </div>
 
 <script>
     const storedCredentials = {
-       "279356@mbi.school.nz": "123",
+        "279356@mbi.school.nz": "123",
         "adam.maxey@mbi.school.nz": "123",
         "andrio.tobuzo@mbi.school.nz": "123",
         "868244@mbi.school.nz": "123",
@@ -151,7 +147,6 @@
         "anotheruser@example.com": "123",
         "yourname@example.com": "123"  // Your email and password added here
     };
-
     let timer;
     let countdownElement = document.getElementById('countdown');
     let timeLeft;
@@ -191,7 +186,6 @@
         if (timeLeft <= 0) {
             clearInterval(timer);
             triggerFlashingScreen();
-            sendEmailReminders();
         } else {
             timeLeft--;
             countdownElement.innerText = `Time left: ${formatTime(timeLeft)}`;
@@ -205,24 +199,20 @@
     }
 
     function triggerFlashingScreen() {
-        document.body.classList.add("flashing-red");
-        alert("Time's up! Please return the equipment.");
+        document.getElementById("timerSection").classList.add("hidden");
+        document.getElementById("timesUpSection").classList.remove("hidden");
     }
 
-    function sendEmailReminders() {
-        let email = document.getElementById("email").value;
-        for (let i = 0; i < 3; i++) {
-            setTimeout(() => {
-                alert(`Reminder ${i + 1}: Please return the equipment.`);
-                if (i === 2) {
-                    alert("You need to see the dean for not returning the equipment.");
-                }
-            }, i * 5000); // 5 seconds between reminders for demo purposes
-        }
+    function returnEquipment() {
+        alert("Thank you for returning the equipment.");
+        window.close```html
+(); // Attempt to close the tab/window
     }
 
-    function cancelTimer() {
-        window.close(); // Close the tab/window
+    function borrowMoreTime() {
+        document.getElementById("timesUpSection").classList.add("hidden");
+        document.getElementById("timerSection").classList.remove("hidden");
+        document.getElementById("startTimerBtn").disabled = false; // Re-enable the Start Timer button
     }
 </script>
 
