@@ -1,5 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+     <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+   function onSubmit(token) {
+     document.getElementById("demo-form").submit();
+   }
+ </script>
+    <button class="g-recaptcha" 
+        data-sitekey="6LfkqTAqAAAAAB33K3G-n4W8PXlee8n47kr_yQjQ" 
+        data-callback='onSubmit' 
+        data-action='submit'>Submit</button>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfkqTAqAAAAAB33K3G-n4W8PXlee8n47kr_yQjQ"></script>
+      <script>
+      function onClick(e) {
+        e.preventDefault();
+        grecaptcha.ready(function() {
+          grecaptcha.execute('6LfkqTAqAAAAAB33K3G-n4W8PXlee8n47kr_yQjQ', {action: 'submit'}).then(function(token) {
+              // Add your logic to submit to your backend server here.
+          });
+        });
+      }
+  </script>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://target.scene7.com/is/image/Target/GUEST_20affc7e-e0d7-4eb6-a6f3-68d13520f8be?wid=488&hei=488&fmt=pjpeg">
