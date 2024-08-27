@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borrow'o'Ball</title>
-    <link href="OIP.ico" rel="icon" type="image/x-icon" />
+    <title>Email and Password Verification with Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +12,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-image: url('file:///Users/macbookair/Downloads/EFBF4B5C-2829-4B45-9326-5EA930E3A2E4.jpeg'); /* Replace with your image path */
+            background-image: url('background.jpg'); /* Replace with your image path */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -81,7 +80,7 @@
 
 <div class="container">
     <h1>Welcome</h1>
-    <p>Please enter your email and password to verify your identity and select a timer for returning the equipment.</p>
+    <p>Please enter your email and password to verify your identity and select a timer for returning the equipment, If you dont return the equipment you might see the deen.</p>
 
     <form id="emailForm" class="emailForm">
         <h2>Enter your email</h2>
@@ -104,11 +103,11 @@
             <option value="1800">30 minutes</option>
             <option value="3600">1 hour</option>
             <option value="5400">1 hour 30 minutes</option>
-            <option value="18000">2 hour 30 minutes</option>
-            <option value="21600">6 hour</option>
+            <option value="9000">2 hours 30 minutes</option>
+            <option value="21600">6 hours</option>
         </select>
-        <button onclick="startTimer()">Start Timer</button>
-        <button onclick="cancelTimer()">Cancel</button>
+        <button id="startTimerBtn" onclick="startTimer()">Start Timer</button>
+        <button id="cancelTimerBtn" onclick="cancelTimer()">Cancel</button>
         <div id="countdown"></div>
     </div>
 </div>
@@ -131,80 +130,6 @@
         "1111496@mbi.school.nz": "123",
         "1098980@mbi.school.nz": "123",
         "thomas.coghlan@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
-        "@mbi.school.nz": "123",
         "279356@mbi.school.nz": "123",
         "ashlee.richards@mbi.school.nz": "123",
         "115421@mbi.school.nz": "123",
@@ -241,6 +166,9 @@
     }
 
     function startTimer() {
+        const startTimerBtn = document.getElementById("startTimerBtn");
+        startTimerBtn.disabled = true; // Disable start button to prevent multiple timers
+
         const selectedTime = parseInt(document.getElementById("timerSelect").value);
         timeLeft = selectedTime;
         countdownElement.innerText = `Time left: ${formatTime(timeLeft)}`;
@@ -283,7 +211,9 @@
 
     function cancelTimer() {
         clearInterval(timer);
-        window.close();
+        document.getElementById("startTimerBtn").disabled = false; // Re-enable start button
+        countdownElement.innerText = "";
+        alert("Timer has been cancelled.");
     }
 </script>
 
