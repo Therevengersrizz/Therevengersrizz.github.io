@@ -1,42 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-      <head>
-    <!-- Include the reCAPTCHA JavaScript API -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</head>
-    <form action="your_form_processing_script.php" method="POST">
-    <!-- Other form fields like name, email, etc. -->
-    
-    <!-- Google reCAPTCHA widget -->
-    <div class="g-recaptcha" data-sitekey="6LfkqTAqAAAAAB33K3G-n4W8PXlee8n47kr_yQjQ"></div>
-    
-    <!-- Submit button -->
-    <button type="submit">Submit</button>
-</form>
-    <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $recaptcha_secret = '6LfkqTAqAAAAAJtlaXPki4L4qWV39kIrgjU6sRAc'; // Replace with your secret key
-    $recaptcha_response = $_POST['g-recaptcha-response'];
-
-    // Make a POST request to the Google reCAPTCHA server
-    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptcha_secret}&response={$recaptcha_response}");
-    $response_keys = json_decode($response, true);
-
-    // Check if the verification was successful
-    if (intval($response_keys["success"]) !== 1) {
-        echo 'Please complete the CAPTCHA';
-    } else {
-        echo 'CAPTCHA was completed successfully, proceed with form submission.';
-        // Process your form data here
-    }
-}
-?>
-      <script src="https://www.google.com/recaptcha/api.js?render=6LfkqTAqAAAAAB33K3G-n4W8PXlee8n47kr_yQjQ"></script>
-<script>
-    grecaptcha.ready(function() {
-        grecaptcha.execute();
-    });
-</script>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://target.scene7.com/is/image/Target/GUEST_20affc7e-e0d7-4eb6-a6f3-68d13520f8be?wid=488&hei=488&fmt=pjpeg">
