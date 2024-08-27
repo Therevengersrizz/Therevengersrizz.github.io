@@ -205,14 +205,17 @@
 
     function returnEquipment() {
         alert("Thank you for returning the equipment.");
-        window.close```html
-(); // Attempt to close the tab/window
+        window.close(); // Attempt to close the tab/window
     }
 
     function borrowMoreTime() {
         document.getElementById("timesUpSection").classList.add("hidden");
         document.getElementById("timerSection").classList.remove("hidden");
         document.getElementById("startTimerBtn").disabled = false; // Re-enable the Start Timer button
+    }
+
+    function cancelTimer() {
+        window.close(); // Attempt to close the tab/window
     }
 </script>
 
